@@ -1,44 +1,48 @@
-SERVICES = $(docker ps -qa) 	# ps - list all containers
-IMAGES = $(docker images - qa) 	# rmi -f - force removal of images
-VOLUMES = $(docker volume ls -q)
-NETWORK = $(docker network ls -q)
-
 # list available commands
 help :
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@echo ''
+	@echo 'Usage: make [TARGET] [EXTRA_ARGUMENTS]'
+	@echo 'Targets:'
+	@echo '	ps		list all containers IDs'
+	@echo '	images		list all images IDs'
+	@echo '	volumes		list all volumes'
+	@echo '	network		list all networks'
+	@echo '	start    	build and run containers'
+	@echo '	down     	stop running containers'
+	@echo '	re  		rebuild containers'
+	@echo '	clean    	stop and remove running containers, images, volumes'
+	@echo ''
 
 # show info
 show : ps images volumes network
 ps :
-	@printf "\033[0;31m\n" && $(SERVICES) && printf "\033[1;37m\n"
+	@printf "\033[0;31m\n" && docker ps -qa && printf "\033[1;37m\n"
 
 images :
-	@printf "\033[0;31m\n" && $(IMAGES) && printf "\033[1;37m\n"
+	@printf "\033[0;31m\n" && docker images -qa && printf "\033[1;37m\n"
 
 volumes :
-	@printf "\033[0;31m\n" && $(VOLUMES) && printf "\033[1;37m\n"
+	@printf "\033[0;31m\n" && docker volume ls -q && printf "\033[1;37m\n"
 
 network :
-	@printf "\033[0;31m\n" && $(NETWORK) && printf "\033[1;37m\n"
+	@printf "\033[0;31m\n" && docker network ls -q && printf "\033[1;37m\n"
 
 # docker tasks
-# run containers
-up :
-	@docker-compose -f ./srcs/docker-compose.yml up
+start :
+	@docker-compose -f ./srcs/docker-compose.yaml up
 
-# stop containers
 down :
-	@docker-compose -f ./srcs/docker-compose.yml down
+	@docker-compose -f ./srcs/docker-compose.yaml down
 
-# restart 
 re :
-	@docker-compose -f ./srcs/docker-compose.yml re
+	@docker-compose -f ./srcs/docker-compose.yaml up --build
 
-# stop and remove running containers, images, volumes and networks
 clean :
-	@docker stop $(SERVICES); docker rm $(SERVICES); \
-	docker rmi -f $(IMAGES); \
-	docker volume rm $(VOLUMES); \
-	docker network rm $(NETWORK) 2> /dev/null
+	@echo "Cleaning before evaluation"
+	@docker stop $(docker ps -qa); docker rm $(docker ps -qa);\
+	docker rmi -f $(docker images -qa);\
+	docker volume rm $(docker volume ls -q);\
+	docker network rm $(docker network ls -q)
+	@echo "Ready to start"
 
-.PHONY : help show ps images volumes network up down re clean
+.PHONY : help show ps images volumes network start down re clean
