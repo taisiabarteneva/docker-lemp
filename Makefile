@@ -13,36 +13,34 @@ help :
 	@echo '	clean    	stop and remove running containers, images, volumes'
 	@echo ''
 
-# show info
-show : ps images volumes network
 ps :
-	@printf "\033[0;31m\n" && docker ps -qa && printf "\033[1;37m\n"
+	@docker ps -a
 
 images :
-	@printf "\033[0;31m\n" && docker images -qa && printf "\033[1;37m\n"
+	@docker images -a
 
 volumes :
-	@printf "\033[0;31m\n" && docker volume ls -q && printf "\033[1;37m\n"
+	@docker volume ls
 
 network :
-	@printf "\033[0;31m\n" && docker network ls -q && printf "\033[1;37m\n"
+	@docker network ls
 
 # docker tasks
 start :
-	@docker-compose -f ./srcs/docker-compose.yaml up
+	@docker-compose -f ./srcs/docker-compose.yml up
 
 down :
-	@docker-compose -f ./srcs/docker-compose.yaml down
+	@docker-compose -f ./srcs/docker-compose.yml down
 
 re :
-	@docker-compose -f ./srcs/docker-compose.yaml up --build
+	@docker-compose -f ./srcs/docker-compose.yml up --build
 
 clean :
-	@echo "Cleaning before evaluation"
-	@docker stop $(docker ps -qa); docker rm $(docker ps -qa);\
-	docker rmi -f $(docker images -qa);\
-	docker volume rm $(docker volume ls -q);\
-	docker network rm $(docker network ls -q)
+	@echo "Cleaning before evaluation..."
+	@docker stop $$(docker ps -qa); docker rm $$(docker ps -qa);\
+	docker rmi -f $$(docker images -qa);\
+	docker volume rm $$(docker volume ls -q);\
+	docker network rm $$(docker network ls -q)
 	@echo "Ready to start"
 
 .PHONY : help show ps images volumes network start down re clean
