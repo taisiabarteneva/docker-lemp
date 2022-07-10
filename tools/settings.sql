@@ -1,7 +1,9 @@
-ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
+-- ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
 
 -- созданиe пользователя с настраиваемыми правами
 CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+GRANT ALL PRIVILEGES ON $MYSQL_DATABASE_NAME.* TO '$MYSQL_USER'@'%';
+FLUSH PRIVILEGES; -- not necessary, to tell the server to reload the grant tables, server reloads the grant tables instantly
 CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE_NAME;
 -- grant all privileges on mydb database to user
 -- CREATE — позволяет пользователю создавать новые таблицы или базы данных
@@ -13,6 +15,3 @@ CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE_NAME;
 -- GRANT type_of_permission ON database_name.table_name TO 'username'@'localhost';
 -- SHOW GRANTS FOR 'username'@'localhost';
 -- mysql -u [username] -p // login as a user [username]
-GRANT ALL PRIVILEGES ON $MYSQL_DATABASE_NAME.* TO '$MYSQL_USER'@'%';
-
-FLUSH PRIVILEGES; -- not necessary, to tell the server to reload the grant tables, server reloads the grant tables instantly
