@@ -1,0 +1,45 @@
+# main context 
+
+# user                www;
+# #  the number of nginx worker processes (default: 1). in most cases, running one worker process per cpu core works well
+# worker_processes    auto;
+# # sets up logging to a particular file, stderr, or syslog and specifies the minimal severity level of messages to log
+# error_log           /var/log/nginx/nginx_error.log warn;
+# # a path to store pid of the main process
+# pid                 /run/nginx.pid;
+# # directive to reference the contents of the feature‑specific files
+# include             /etc/nginx/modules-enabled/*.conf;
+
+# main config is /etc/nginx/nginx.con
+
+server {
+    # ----------- basic settings -----------
+    listen              443 ssl;
+    access_log          /var/log/nginx/nginx_access.log;
+    error_log           /var/log/nginx/nginx_error.log warn;
+
+    server_name         wurrigon.42.fr;
+    root                /var/www/html;
+    index               index.php;
+
+    # ----------- certificates -----------
+    ssl                         on;
+    ssl_protocols               TLSv1.3;
+    ssl_certificate             /etc/nginx/ssl/wurrigon.crt;
+	ssl_certificate_key         /etc/nginx/ssl/wurrigon.key;
+    ssl_prefer_server_ciphers   off;
+    add_header                  Strict-Transport-Security "max-age=31536000" always;
+
+    # перехватывает запросы, которые не попали в другие locations 
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+    # try_files specifies the files and directories in which nginx should check for files
+
+    # when location directives are followed by a ~ (tilde), NGINX will 
+    # perform a regular expression match, which is always case-sensitive
+    # $ - ends with php
+    location ~ \.php$ {
+        try_files $uri $uri/ =404;
+    }
+}
