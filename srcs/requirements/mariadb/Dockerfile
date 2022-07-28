@@ -1,9 +1,6 @@
-# From what image we are building 
 FROM debian:buster
 
-RUN set -ex; \
-    apt update; \
-    apt install -y mariadb-server; \
+RUN apt update && apt install -y mariadb-server; \
     rm -rf /var/lib/apt/lists/*
 
 VOLUME [ "/var/lib/mysql" ]
@@ -16,4 +13,5 @@ RUN chmod +x /usr/bin/mariadb-setup.sh
 
 ENTRYPOINT [ "/usr/bin/mariadb-setup.sh" ]
 
+# restarting the server when an error occurs and logging runtime information to an error log
 CMD [ "mysqld_safe" ]
