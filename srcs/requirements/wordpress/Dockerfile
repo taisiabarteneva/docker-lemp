@@ -16,8 +16,8 @@ RUN sed -i "s/listen = \/run\/php\/php7.3-fpm.sock/listen = wordpress:9000/" "/e
 
 EXPOSE 9000
 
-COPY ./tools/wp-setup.sh /
+COPY ./tools/ /var/www/
 
-RUN chmod +x wp-setup.sh
+RUN chmod +x /var/www/wp-setup.sh
 
-ENTRYPOINT [ "./wp-setup.sh" ]
+ENTRYPOINT [ "/var/www/wp-setup.sh" ]

@@ -11,5 +11,4 @@ RUN chmod +x /usr/bin/mariadb-setup.sh
 
 ENTRYPOINT [ "/usr/bin/mariadb-setup.sh" ]
 
-# restarting the server when an error occurs and logging runtime information to an error log
-CMD [ "mysqld_safe" ]
+CMD [ "mysqld" ]
