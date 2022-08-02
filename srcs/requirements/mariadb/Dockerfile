@@ -11,4 +11,4 @@ RUN chmod +x /usr/bin/mariadb-setup.sh
 
 ENTRYPOINT [ "/usr/bin/mariadb-setup.sh" ]
 
-CMD [ "mysqld" ]
+CMD [ "mysqld_safe" ]

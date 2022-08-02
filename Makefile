@@ -1,5 +1,7 @@
 all :
-	@docker-compose -f ./srcs/docker-compose.yml up
+	@mkdir -p /home/wurrigon/data/mariadb
+	@mkdir -p /home/wurrigon/data/wordpress
+	@docker-compose -f ./srcs/docker-compose.yml up -d
 
 down :
 	@docker-compose -f ./srcs/docker-compose.yml down
@@ -7,15 +9,14 @@ down :
 re :
 	@docker-compose -f ./srcs/docker-compose.yml up --build 
 
-clean :
-	@docker stop $$(docker ps -qa); \
-	docker rm $$(docker ps -qa); \
-	docker rmi -f $$(docker images -qa); \
-	docker volume rm $$(docker volume ls -q); \
-	docker network rm $$(docker network ls -q); \
-	docker builder prune -a -f
+fclean : down
+	@docker rmi -f $$(docker images -qa);\
+	docker volume rm $$(docker volume ls -q);\
+	sudo rm -rf /home/wurrigon/data/mariadb
+	sudo rm -rf /home/wurrigon/data/wordpress 
 
-.PHONY: all re down clean 
+# docker builder prune -a --force
+.PHONY: all re down fclean 
 
 # ---------------------------------------- links
 # https://wurrigon.42.fr/

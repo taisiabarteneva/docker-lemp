@@ -13,7 +13,7 @@ server {
 	ssl_certificate_key         /etc/ssl/wurrigon.42.fr.key;
     add_header                  Strict-Transport-Security "max-age=31536000" always;
 
-    root                        /var/www/wordpress;
+    root                        /var/www/html/wordpress;
     index                       index.php;
     
     location / {
