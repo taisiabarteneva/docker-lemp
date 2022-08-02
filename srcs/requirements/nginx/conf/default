@@ -8,7 +8,7 @@ server {
 
     # ----------------------------- certificates
     ssl                         on;
-    ssl_protocols               TLSv1.2 TLSv1.3;
+    ssl_protocols               TLSv1.3;
     ssl_certificate             /etc/ssl/wurrigon.42.fr.cert;
 	ssl_certificate_key         /etc/ssl/wurrigon.42.fr.key;
     add_header                  Strict-Transport-Security "max-age=31536000" always;
@@ -16,13 +16,22 @@ server {
     root                        /var/www/wordpress;
     index                       index.php;
     
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
     location ~ \.php$ {
-        try_files $uri =404;
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        include /etc/nginx/snippets/fastcgi-php.conf;
         fastcgi_pass wordpress:9000;
-        fastcgi_index index.php;
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param PATH_INFO $fastcgi_path_info;
     }
 }
+
+# /etc/nginx/snippets/fastcgi-php.conf:
+
+# # regex to split $uri to $fastcgi_script_name and $fastcgi_path
+# fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+# try_files $fastcgi_script_name =404;
+# set $path_info $fastcgi_path_info;
+# fastcgi_param PATH_INFO $path_info;
+# fastcgi_index index.php;
+# include fastcgi.conf;
