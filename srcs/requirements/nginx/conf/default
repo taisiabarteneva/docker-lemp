@@ -14,7 +14,7 @@ server {
     add_header                  Strict-Transport-Security "max-age=31536000" always;
 
     root                        /var/www/html/wordpress;
-    index                       index.php;
+    index                       index.php index.html;
     
     location / {
         try_files $uri $uri/ =404;

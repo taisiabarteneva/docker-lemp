@@ -5,10 +5,15 @@ RUN apt update && apt install -y mariadb-server; \
 
 EXPOSE 3306
 
-COPY ./tools/mariadb-setup.sh   /usr/bin/
+RUN sed -i 's/^bind-address/#&/' /etc/mysql/mariadb.conf.d/50-server.cnf && \
+    sed -i "s/#port/port/"      /etc/mysql/mariadb.conf.d/50-server.cnf
 
-RUN chmod +x /usr/bin/mariadb-setup.sh
+COPY ./tools/   /usr/bin/
 
-ENTRYPOINT [ "/usr/bin/mariadb-setup.sh" ]
+RUN chmod +x /usr/bin/createdb.sql && \ 
+    service mysql start && \
+    mysql < /usr/bin/createdb.sql && \
+    rm -f /usr/bin/createdb.sql && \
+    service mysql stop
 
 CMD [ "mysqld_safe" ]
