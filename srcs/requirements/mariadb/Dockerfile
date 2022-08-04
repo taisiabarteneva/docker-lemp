@@ -10,9 +10,9 @@ RUN sed -i 's/^bind-address/#&/' /etc/mysql/mariadb.conf.d/50-server.cnf && \
 
 COPY ./tools/   /usr/bin/
 
-RUN chmod +x /usr/bin/createdb.sql && \ 
+RUN chmod +x /usr/bin/setup-db.sql && \ 
     service mysql start && \
-    mysql < /usr/bin/createdb.sql && \
-    rm -f /usr/bin/createdb.sql
+    mysql < /usr/bin/setup-db.sql && \
+    rm -f /usr/bin/setup-db.sql
 
 CMD [ "mysqld_safe" ]
