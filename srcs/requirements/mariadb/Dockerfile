@@ -13,7 +13,6 @@ COPY ./tools/   /usr/bin/
 RUN chmod +x /usr/bin/createdb.sql && \ 
     service mysql start && \
     mysql < /usr/bin/createdb.sql && \
-    rm -f /usr/bin/createdb.sql && \
-    service mysql stop
+    rm -f /usr/bin/createdb.sql
 
 CMD [ "mysqld_safe" ]

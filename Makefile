@@ -12,10 +12,10 @@ re :
 fclean : down
 	@docker rmi -f $$(docker images -qa);\
 	docker volume rm $$(docker volume ls -q);\
-	docker builder prune -a --force
 	sudo rm -rf /home/wurrigon/data/mariadb
 	sudo rm -rf /home/wurrigon/data/wordpress 
-
+	docker builder prune -a --force
+	
 .PHONY: all re down fclean 
 
 # ---------------------------------------- links
