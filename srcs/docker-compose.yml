@@ -13,7 +13,8 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/wurrigon/data/mariadb
+      # device: /home/wurrigon/data/mariadb
+      device: /Users/sexysushi/data/mariadb 
 
   wordpress:
     driver: local
@@ -21,12 +22,12 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/wurrigon/data/wordpress
+      # device: /home/wurrigon/data/wordpress
+      device: /Users/sexysushi/data/wordpress 
 
 services:
   mariadb:
     build: ./requirements/mariadb/
-    env_file: .env
     container_name: mariadb
     restart: always
     volumes: 
@@ -59,3 +60,28 @@ services:
       - inception
     ports:
       - "443:443"
+  
+  redis:
+    build: ./requirements/bonus/redis/
+    container_name: redis
+    restart: always
+    depends_on:
+      - nginx
+    networks:
+      - inception
+    ports:
+      - "6379:6379"
+    
+  adminer:
+    container_name: adminer
+    build: ./requirements/bonus/adminer/
+    restart: always
+    networks:
+      - inception
+    volumes:
+      - wordpress:/var/www/html/wordpress
+    depends_on:
+      # - mariadb
+      - wordpress
+    ports:
+      - "9000:8080"

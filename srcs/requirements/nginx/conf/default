@@ -1,12 +1,17 @@
 server {
-    # ----------------------------- basic settings
+	listen 80;
+	listen [::]:80;
+	server_name wurrigon.42.fr;
+	return 301 https://$host$request_uri;
+}
+
+server {
     listen                      443 ssl;
     listen                      [::]:443 ssl;
     server_name                 wurrigon.42.fr;
     access_log                  /var/log/nginx/nginx_access.log;
     error_log                   /var/log/nginx/nginx_error.log warn;
 
-    # ----------------------------- certificates
     ssl                         on;
     ssl_protocols               TLSv1.3;
     ssl_certificate             /etc/ssl/wurrigon.42.fr.cert;
@@ -23,6 +28,11 @@ server {
     location ~ \.php$ {
         include /etc/nginx/snippets/fastcgi-php.conf;
         fastcgi_pass wordpress:9000;
+    }
+
+    location ~.html {
+        root /var/www/html/wordpress/static-page;
+        try_files $uri $uri/ =404;
     }
 }
 

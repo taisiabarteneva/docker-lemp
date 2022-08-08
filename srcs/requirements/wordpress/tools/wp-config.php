@@ -56,7 +56,6 @@ define('AUTH_SALT',        'Z[<-lW3rzi)hN-mMV+np]Q8uv]C~%hy9&i0bA-}kxh/elSyW#UPa
 define('SECURE_AUTH_SALT', 'hEbB <)({;i{T!|@1UJR*>V+LeBkIg<(9lcjdNxjjA |yoO;b{uo-?/Y~_`|C)nd');
 define('LOGGED_IN_SALT',   '.D0t{}A,O3X-:6kt[ ?1^cP=y%n!f;{b8:`e6J u>3X-fSuSFYU@:[#WZhLR>4dv');
 define('NONCE_SALT',       'H4T/XM]1$X@hr[B6G*ts#|v;)U+<?13@#Qj/*+gny6B~_lkKcUH8-pWO?}TP{[OX');
-
 /**#@-*/
 
 /**
@@ -82,6 +81,10 @@ $table_prefix = 'wp_';
 define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
+define( 'WP_CACHE', true);
+define( 'WP_CACHE_KEY_SALT', 'wurrigon');
+define( 'WP_REDIS_HOST', 'redis' );
+define( 'WP_REDIS_PORT', 6379 );
 
 
 /* That's all, stop editing! Happy publishing. */
