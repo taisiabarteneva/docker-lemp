@@ -1,8 +1,6 @@
 all :
-# @mkdir -p /home/wurrigon/data/mariadb
-# @mkdir -p /home/wurrigon/data/wordpress
-	@mkdir -p /Users/sexysushi/data/mariadb
-	@mkdir -p /Users/sexysushi/data/wordpress
+	@mkdir -p /home/wurrigon/data/mariadb
+	@mkdir -p /home/wurrigon/data/wordpress
 	@docker-compose -f ./srcs/docker-compose.yml up -d
 
 down :
@@ -21,11 +19,9 @@ logs:
 fclean : down
 	@docker rmi -f $$(docker images -qa);\
 	docker volume rm $$(docker volume ls -q);\
-
-# sudo rm -rf /home/wurrigon/data/mariadb
-# sudo rm -rf /home/wurrigon/data/wordpress 
-	
-# docker builder prune -a --force
+	sudo rm -rf /home/wurrigon/data/mariadb
+	sudo rm -rf /home/wurrigon/data/wordpress 
+	docker builder prune -a --force
 	
 .PHONY: all re down fclean 
 
@@ -33,6 +29,8 @@ fclean : down
 # https://wurrigon.42.fr/
 # https://wurrigon.42.fr/wp-login
 # https://wurrigon.42.fr/wp-admin
+# https://wurrigon.42.fr/adminer/
+# https://wurrigon.42.fr/index.html
 
 # ---------------------------------------- clean
 # [docker system prune -a] removes

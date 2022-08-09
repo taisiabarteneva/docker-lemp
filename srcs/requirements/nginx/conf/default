@@ -2,7 +2,8 @@ server {
 	listen 80;
 	listen [::]:80;
 	server_name wurrigon.42.fr;
-	return 301 https://$host$request_uri;
+    server_tokens off;
+    return 301 https://$server_name$request_uri;
 }
 
 server {
